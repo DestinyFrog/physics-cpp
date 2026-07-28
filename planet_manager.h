@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <numbers>
 #include <unordered_map>
 using namespace std;
 
@@ -16,6 +17,7 @@ struct PlanetNode {
 
 class PlanetManager {
     private:
+    const double G = 6.6743f * pow(10, -11);
     vector<Planet*> planets;
     vector<PlanetNode> nodes;
 
