@@ -4,9 +4,9 @@ PlanetManager::PlanetManager() {
     planets = {};
 }
 
-void PlanetManager::add_planet(string name, Planet planet) {
+void PlanetManager::add_planet(Planet* planet) {
     for (const auto& [key, planet2] : planets) {
-        PlanetNode node = { name, key }
+        PlanetNode node = { &planet, planet2 }
         nodes.push_back(node);
     }
 

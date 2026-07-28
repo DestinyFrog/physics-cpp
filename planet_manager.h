@@ -9,19 +9,19 @@ using namespace std;
 #include "planet.h"
 
 struct PlanetNode {
-    string planet1;
-    string planet2;
+    Planet* planet1;
+    Planet* planet2;
     bool is_colliding;
 };
 
 class PlanetManager {
     private:
-    unordered_map<string, Planet> planets;
+    vector<Planet*> planets;
     vector<PlanetNode> nodes;
 
     public:
     PlanetManager();
-    void add_planet(string name, Planet planet); 
+    void add_planet(Planet* planet); 
     void draw();
     void update();
     void mouse_button_down();

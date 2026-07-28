@@ -19,12 +19,12 @@ int main() {
     const double earth_mass = 5.9722f * pow(10, 24);
     const double earth_radius = 6.371;
     Planet earth = Planet(width/2, height/2, earth_radius * 5, earth_mass * pow(10, -13), SKYBLUE);
-    manager.add_planet("earth", earth);
+    manager.add_planet(&earth);
     
     const double moon_mass = 7.35f * pow(10, 22);
     const double moon_radius = 1.737;
     Planet moon = Planet(width/4, height/4, moon_radius * 5, moon_mass * pow(10, -13), LIGHTGRAY);
-    manager.add_planet("moon", earth);
+    manager.add_planet(&earth);
 
     bool is_colliding = false;
 
