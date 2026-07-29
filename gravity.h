@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 #include "body.h"
 
@@ -19,9 +20,6 @@ class Gravity {
     vector<BodyNode> nodes;
     vector<Body*> bodies;
     double G;
-
-    double distance_between_node(BodyNode* node);
-    double angle_between_node(BodyNode* node);
 
     public:
     Gravity();

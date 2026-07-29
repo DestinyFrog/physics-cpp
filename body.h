@@ -2,6 +2,7 @@
 #define BODY_H_
 
 #include <cmath>
+#include <raylib.h>
 #include "util.h"
 
 class Body {
@@ -11,6 +12,7 @@ class Body {
     vec2 acceleration;
 
     protected:
+    double restitution;
     double mass;
     double radius;
     vec2 position;
@@ -22,14 +24,19 @@ class Body {
 
     double get_x();
     double get_y();
+    double get_velocity_x();
+    double get_velocity_y();
     double get_mass();
     double get_radius();
 
-    Body* set_mass(double mass);
-    Body* set_radius(double radius);
-    Body* set_position(double x, double y);
+    void set_mass(double mass);
+    void set_radius(double radius);
+    void set_position(double x, double y);
+    void set_velocity(double x, double y);
+    void set_restitution(double restitution);
 
     void clear_velocity();
+    void inverse_velocity();
     void add_force(double force, double angle);
 };
 
