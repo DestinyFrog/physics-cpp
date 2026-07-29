@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "planet_manager.h"
+#include "gravity.h"
 #include "planet.h"
 #include "util.h"
 
@@ -12,38 +12,52 @@ int main() {
     const int width = 600;
     const int height = 600;
 
-    const double earth_mass = 5.97f * pow(10, 24);
-    const double earth_radius = 6.371f;
-    Planet earth = Planet(width/2, height/2, earth_radius * 5, earth_mass * pow(10, -13), SKYBLUE);
-    
-    const double moon_mass = 7.35f * pow(10, 22);
-    const double moon_radius = 1.737f;
-    Planet moon = Planet(width/4, height/4, moon_radius * 5, moon_mass * pow(10, -13), LIGHTGRAY);
+    Planet earth = Planet(SKYBLUE);
+    earth.set_mass(5.97f * pow(10, 24));
+    earth.set_radius(6.371f);
+    earth.set_position(width/2, height/2);
 
-    const double mars_mass = 6.41f * pow(10, 23);
-    const double mars_radius = 3.389f;
-    Planet mars = Planet(width/4*3, height/4, mars_radius * 5, mars_mass * pow(10, -13), ORANGE);
+    Planet mars = Planet(ORANGE);
+    mars.set_mass(6.41f * pow(10, 23));
+    mars.set_radius(3.389f);
+    mars.set_position(width/4*3, height/4);
 
-    PlanetManager manager = PlanetManager();
-    manager.add_planet(&earth);
-    manager.add_planet(&moon);
-    manager.add_planet(&mars);
+    Planet moon = Planet(LIGHTGRAY);
+    moon.set_mass(7.35f * pow(10, 22));
+    moon.set_radius(1.737f);
+    moon.set_position(width/4, height/4);
+
+    Gravity gravity = Gravity();
+    gravity.add_body(&earth);
+    gravity.add_body(&mars);
+    gravity.add_body(&moon);
 
     InitWindow(width, height, "Planetas");
     SetTargetFPS(60);
 
     while(!WindowShouldClose()) {
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-            manager.mouse_button_down();
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            earth.mouse_button_down();
+            mars.mouse_button_down();
+            moon.mouse_button_down();
+        }
 
-        if (IsMouseButtonUp(MOUSE_BUTTON_LEFT))
-            manager.mouse_button_up();
+        if (IsMouseButtonUp(MOUSE_BUTTON_LEFT)) {
+            moon.mouse_button_up();
+            mars.mouse_button_up();
+            earth.mouse_button_up();
+        }
 
-        manager.update();
+        gravity.update();
+        earth.update();
+        mars.update();
+        moon.update();
 
         BeginDrawing();
             ClearBackground(DARKGRAY);
-            manager.draw();
+            earth.draw();
+            mars.draw();
+            moon.draw();
         EndDrawing();
     }
 
