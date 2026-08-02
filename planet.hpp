@@ -4,30 +4,29 @@
 #include <cmath>
 #include <numbers>
 #include <raylib.h>
-#include "body.h"
+#include "body.hpp"
 
 using namespace std;
+
+enum PlanetState {
+    IDLE,
+    DRAGGING,
+    AIMING,
+};
 
 class Planet: public Body {
     private:
     Color color;
     Vector2 mouse_offset;
     Vector2 arrow_position;
-    enum {
-        IDLE,
-        DRAGGING,
-        AIMING,
-    } state;
 
     public:
+    PlanetState state;
+
     Planet(Color color);
 
     void draw();
     void update();
-    void left_mouse_button_down();
-    void left_mouse_button_up();
-    void right_mouse_button_down();
-    void right_mouse_button_up();
 };
 
-#endif /* PLANET_H_ */
+#endif /* PLANET_H_ */  

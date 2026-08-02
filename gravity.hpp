@@ -3,16 +3,14 @@
 
 #include <vector>
 #include <cmath>
-#include <iostream>
 
-#include "body.h"
+#include "body.hpp"
 
 using namespace std;
 
 struct BodyNode {
-    Body* body_a;
-    Body* body_b;
-    bool is_colliding;
+    Body* A;
+    Body* B;
 };
 
 class Gravity {

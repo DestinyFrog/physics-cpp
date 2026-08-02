@@ -1,12 +1,12 @@
-#include "gravity.h"
+#include "gravity.hpp"
 
 Gravity::Gravity() {
     G = 6.6743f * pow(10, -11);
 }
 
 void Gravity::add_body(Body* body) {
-    for (auto body_b: bodies) {
-        BodyNode node = { body, body_b };
+    for (auto B: bodies) {
+        BodyNode node = { body, B };
         nodes.push_back(node);
     }
     bodies.push_back(body);
@@ -14,35 +14,41 @@ void Gravity::add_body(Body* body) {
 
 void Gravity::update() {
     for (auto node: nodes) {
-        double distance_x = node.body_a->get_x() - node.body_b->get_x();
-        double distance_y = node.body_a->get_y() - node.body_b->get_y();
+        vec2 distance_vec = node.A->position - node.B->position; 
+        double distance = distance_vec.pit();
 
-        // d = √( x² + y² )
-        double distance = sqrt(pow(distance_x, 2) + pow(distance_y, 2));
+        if (distance == 0)
+            continue;
 
-        // rad = atan2( x, y )
-        double rad = atan2(distance_y, distance_x);
+        if (distance <= node.A->radius + node.B->radius) {
+            // vetor normal unitário de A para B
+            vec2 n = (node.B->position - node.A->position) / distance;
 
-        // G * (m1 * m2) / d²
-        double F = G * ( node.body_a->get_mass() * node.body_b->get_mass() ) / pow(distance, 2);
+            // velocidade relativa de A em relação a B na direção normal
+            vec2 vel_rel_vec = node.A->velocity - node.B->velocity;
+            double v_rel = vel_rel_vec.x * n.x + vel_rel_vec.y * n.y;
 
-        if (distance <= node.body_a->get_radius() + node.body_b->get_radius()) {
-            if (node.is_colliding == false) {
-                // Impulso/Momento
-                double px = node.body_a->get_mass() * node.body_a->get_velocity_x();
-                double py = node.body_a->get_mass() * node.body_a->get_velocity_y();
-                
-                
+            if (v_rel > 0) {
+                double e = node.A->restitution * node.B->restitution;
+                double j = -(1 + e) * v_rel / (inv(node.A->mass) + inv(node.B->mass));
+
+                node.A->velocity += n * (j / node.A->mass);
+                node.B->velocity += n * (-j / node.B->mass);
             }
 
-            node.is_colliding = true;
-            // node.body_a->add_force(-2 * F, rad + numbers::pi);
-            // node.body_b->add_force(-2 * F, rad);
+            // separa corpos sobrepostos
+            double overlap = node.A->radius + node.B->radius - distance;
+            node.A->position += n * (-overlap * 0.5);
+            node.B->position += n * (overlap * 0.5);
         }
         else {
-            node.is_colliding = false;
-            node.body_a->add_force(F, rad + numbers::pi);
-            node.body_b->add_force(F, rad);
+            double rad = distance_vec.atan2();
+
+            // G * (m1 * m2) / d²
+            double F = G * ( node.A->mass * node.B->mass ) / pow(distance, 2);
+
+            node.A->add_force(F, rad + numbers::pi);
+            node.B->add_force(F, rad);
         }
     }
 }
