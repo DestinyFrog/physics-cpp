@@ -17,6 +17,12 @@ vec2* vec2::operator+=(const vec2& b) {
     return this;
 }
 
+vec2* vec2::operator=(const double& b) {
+    this->x += b;
+    this->y += b;
+    return this;
+}
+
 vec2 operator-(const vec2& a, const vec2& b) {
     vec2 res;
     res.x = a.x - b.x;
@@ -65,4 +71,8 @@ double vec2::atan2() {
 
 double vec2::pit() {
     return std::sqrt(std::pow(x, 2) + std::pow(y, 2));
+}
+
+double vec2::collapse() {
+    return x + y;
 }

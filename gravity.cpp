@@ -22,16 +22,24 @@ void Gravity::update() {
 
         if (distance <= node.A->radius + node.B->radius) {
             // vetor normal unitário de A para B
+            // n = posB - posA / √(posA² + posB²)
             vec2 n = (node.B->position - node.A->position) / distance;
 
             // velocidade relativa de A em relação a B na direção normal
-            vec2 vel_rel_vec = node.A->velocity - node.B->velocity;
-            double v_rel = vel_rel_vec.x * n.x + vel_rel_vec.y * n.y;
+            // Vrel = (velA - velB) * n
+            double v_rel = ((node.A->velocity - node.B->velocity) * n).collapse();
 
+            // se {Vrel > 0} esta colidindo
             if (v_rel > 0) {
+                // constante de restituicao
                 double e = node.A->restitution * node.B->restitution;
+
+                // Impulso
+                // J = -(1 + e) * Vrel /
+                //        1/mA + 1/mB
                 double j = -(1 + e) * v_rel / (inv(node.A->mass) + inv(node.B->mass));
 
+                // V = Vo + n * J/m
                 node.A->velocity += n * (j / node.A->mass);
                 node.B->velocity += n * (-j / node.B->mass);
             }
@@ -42,11 +50,11 @@ void Gravity::update() {
             node.B->position += n * (overlap * 0.5);
         }
         else {
-            double rad = distance_vec.atan2();
-
+            // Força da Gravidade
             // G * (m1 * m2) / d²
             double F = G * ( node.A->mass * node.B->mass ) / pow(distance, 2);
-
+            
+            double rad = distance_vec.atan2();
             node.A->add_force(F, rad + numbers::pi);
             node.B->add_force(F, rad);
         }

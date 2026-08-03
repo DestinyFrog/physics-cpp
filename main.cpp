@@ -15,14 +15,14 @@ int main() {
     PlanetFactory planet_factory = PlanetFactory(&gravity);
 
     InitWindow(width, height, "Planetas");
-    SetTargetFPS(60);
+    SetTargetFPS(20);
 
     while(!WindowShouldClose()) {
         planet_factory.update();
         gravity.update();
 
         BeginDrawing();
-            ClearBackground(DARKGRAY);
+            ClearBackground(RAYWHITE);
             planet_factory.draw();
         EndDrawing();
     }

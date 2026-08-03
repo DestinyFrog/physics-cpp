@@ -10,9 +10,11 @@ struct vec2 {
     double y;
 
     vec2* operator+=(const vec2& b);
+    vec2* operator=(const double& b);
     vec2 abs();
     double atan2();
     double pit();
+    double collapse();
 };
 
 vec2 operator+(const vec2& a, const vec2& other);

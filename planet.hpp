@@ -2,6 +2,7 @@
 #define PLANET_H_
 
 #include <cmath>
+#include <iostream>
 #include <numbers>
 #include <raylib.h>
 #include "body.hpp"
@@ -17,9 +18,13 @@ enum PlanetState {
 
 class Planet: public Body {
     private:
+    string name;
     Color color;
     Vector2 mouse_offset;
     Vector2 arrow_position;
+    bool is_hovering;
+    
+    void calc_if_hovering();
 
     public:
     PlanetState state;
@@ -28,7 +33,6 @@ class Planet: public Body {
 
     void draw();
     void update();
-
     void pause();
     void resume();
 };

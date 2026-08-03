@@ -8,16 +8,16 @@ PlanetFactory::PlanetFactory(Gravity* gravity) {
 }
 
 void PlanetFactory::update() {
-    bool planet_is_aiming = false;
+    bool mouse_focus_on_planet = false;
     for (auto& planet: planets) {
         planet->update();
-        if(planet->state == PlanetState::AIMING || planet->state == PlanetState::DRAGGING)
-            planet_is_aiming = true;
+        if(planet->state != PlanetState::IDLE)
+            mouse_focus_on_planet = true;
     }
 
     switch (state) {
         case IDLE:
-            if (!planet_is_aiming && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            if (!mouse_focus_on_planet && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
                 state = AIMING;
                 Vector2 mouse_pos = GetMousePosition();
                 aiming_start_position.x = mouse_pos.x;
