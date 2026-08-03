@@ -9,6 +9,9 @@ Planet::Planet(Color color): Body() {
 
 void Planet::update() {
     switch (state) {
+        case PAUSED:
+            // nothing
+        break;
         case IDLE: {
             move();
 
@@ -65,4 +68,13 @@ void Planet::draw() {
         DrawLine(position.x, position.y, arrow_position.x, arrow_position.y, RED);
         DrawCircle(arrow_position.x, arrow_position.y, 3, RED);
     }
+}
+
+void Planet::pause() {
+    state = PAUSED;
+}
+
+void Planet::resume() {
+    if (state == PAUSED)
+        state = IDLE;
 }

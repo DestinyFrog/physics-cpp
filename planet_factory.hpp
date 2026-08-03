@@ -18,7 +18,8 @@ class PlanetFactory {
     vec2 aiming_position;
     enum {
         IDLE,
-        AIMING
+        AIMING,
+        PAUSED
     } state;
 
     void create_planet();
@@ -27,6 +28,9 @@ class PlanetFactory {
     PlanetFactory(Gravity *gravity);
     void update();
     void draw();
+
+    void pause();
+    void resume();
 };
 
 #endif /* PLANET_FACTORY_H_ */

@@ -26,8 +26,11 @@ void PlanetFactory::update() {
                 aiming_position.x = aiming_start_position.x;
                 aiming_position.y = aiming_start_position.y;
             }
+
+            if (IsKeyPressed(KEY_SPACE))
+                pause();
         break;
-        case AIMING:
+        case AIMING: {
             Vector2 mouse_pos = GetMousePosition();
             aiming_position.x = mouse_pos.x;
             aiming_position.y = mouse_pos.y;
@@ -36,6 +39,10 @@ void PlanetFactory::update() {
                 state = IDLE;
                 create_planet();
             }
+        } break;
+        case PAUSED:
+            if (IsKeyPressed(KEY_SPACE))
+                resume();
         break;
     }
 }
@@ -44,11 +51,19 @@ void PlanetFactory::draw() {
     for (auto& planet: planets)
         planet->draw();
 
-    if (state == AIMING) {
-        DrawLine(aiming_start_position.x, aiming_start_position.y, aiming_position.x, aiming_position.y, RED);
+    switch (state) {
+        case AIMING: {
+            DrawLine(aiming_start_position.x, aiming_start_position.y, aiming_position.x, aiming_position.y, RED);
 
-        double arrow_size = (aiming_position - aiming_start_position).pit();
-        DrawCircleLines(aiming_start_position.x, aiming_start_position.y, arrow_size, RED);
+            double arrow_size = (aiming_position - aiming_start_position).pit();
+            DrawCircleLines(aiming_start_position.x, aiming_start_position.y, arrow_size, RED);
+        } break;
+        case PAUSED: {
+            DrawRectangle(GetScreenWidth() - 40, 20, 20, 60, RAYWHITE);
+            DrawRectangle(GetScreenWidth() - 70, 20, 20, 60, RAYWHITE);
+        } break;
+        default:
+        break;
     }
 }
 
@@ -64,4 +79,20 @@ void PlanetFactory::create_planet() {
 
     gravity->add_body(planet.get());
     planets.push_back(std::move(planet));
+}
+
+void PlanetFactory::pause() {
+    state = PAUSED;
+
+    for (auto& planet: planets)
+        planet->pause();
+}
+
+void PlanetFactory::resume() {
+    if (state == PAUSED) {
+        state = IDLE;
+
+        for (auto& planet: planets)
+            planet->resume();
+    }
 }

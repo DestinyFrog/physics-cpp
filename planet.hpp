@@ -12,6 +12,7 @@ enum PlanetState {
     IDLE,
     DRAGGING,
     AIMING,
+    PAUSED,
 };
 
 class Planet: public Body {
@@ -27,6 +28,9 @@ class Planet: public Body {
 
     void draw();
     void update();
+
+    void pause();
+    void resume();
 };
 
 #endif /* PLANET_H_ */  
